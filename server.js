@@ -27,11 +27,13 @@ const authenticateJWT = (req, res, next) => {
         req.user = verified;
         next();
     } catch (error) {
+        console.error('Invalid token', error);
         res.status(400).send('Invalid Token');
     }
 };
 
 app.post('/receive-packet', authenticateJWT, (req, res) => {
+    console.log('Packet received:', req.body.packet);
     receivedPacket = req.body.packet;
     res.status(200).send('Packet received');
 });
