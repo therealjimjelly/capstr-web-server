@@ -12,6 +12,10 @@
     "cors": "^2.8.5",
     "jsonwebtoken": "^8.5.1"
   },
+  "engines": {
+    "node": ">=14.0.0 <15.0.0",
+    "npm": ">=6.0.0 <7.0.0"
+  },
   "author": "Your Name",
   "license": "ISC"
 }
