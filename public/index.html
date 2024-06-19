@@ -22,6 +22,16 @@
     <h1>Received Packet</h1>
     <div id="packet">No packet received</div>
 
-    <script src="script.js"></script>
+    <script>
+        const eventSource = new EventSource('/events');
+
+        eventSource.onmessage = function(event) {
+            document.getElementById('packet').innerText = event.data || 'No packet received';
+        };
+
+        eventSource.onerror = function() {
+            console.error('EventSource failed.');
+        };
+    </script>
 </body>
 </html>

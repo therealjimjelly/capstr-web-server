@@ -11,6 +11,7 @@ const port = process.env.PORT || 3000;
 const secretKey = process.env.SECRET_KEY;
 
 let receivedPacket = '';
+let clients = [];
 
 app.use(express.json());
 app.use(cors());
@@ -33,15 +34,32 @@ const authenticateJWT = (req, res, next) => {
 };
 
 app.post('/receive-packet', authenticateJWT, (req, res) => {
-    console.log('Packet received:', req.body.packet);
     receivedPacket = req.body.packet;
+    console.log('Packet received:', receivedPacket);
+
+    // Send the update to all connected clients
+    clients.forEach(client => client.res.write(`data: ${receivedPacket}\n\n`));
+
     res.status(200).send('Packet received');
 });
 
-app.get('/packet', (req, res) => {
-    res.json({ packet: receivedPacket });
+app.get('/events', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    // Send an initial message to confirm connection
+    res.write(`data: Connected\n\n`);
+
+    const clientId = Date.now();
+    clients.push({ id: clientId, res });
+
+    req.on('close', () => {
+        clients = clients.filter(client => client.id !== clientId);
+    });
 });
 
 app.listen(port, () => {
-    console.log(`Web server is running on port ${port}`);
+    const message = `Web server is running on port ${port}`;
+    console.log(message);
 });

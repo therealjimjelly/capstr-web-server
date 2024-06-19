@@ -1,7 +1,11 @@
-async function fetchPacket() {
-    const response = await fetch('/packet');
-    const data = await response.json();
-    document.getElementById('packet').innerText = data.packet || 'No packet received';
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const eventSource = new EventSource('/events');
 
-setInterval(fetchPacket, 1000); // Fetch the latest packet every second
+    eventSource.onmessage = function(event) {
+        document.getElementById('packet').innerText = event.data || 'No packet received';
+    };
+
+    eventSource.onerror = function() {
+        console.error('EventSource failed.');
+    };
+});
