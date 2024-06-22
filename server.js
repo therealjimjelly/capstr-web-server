@@ -65,6 +65,7 @@ setInterval(() => {
         clients.forEach(client => {
             if (!client.res.finished) {
                 client.res.write('data: {"keepAlive": true}\n\n');
+                console.log("ping sent");
             }
         });
     } catch (error) {
