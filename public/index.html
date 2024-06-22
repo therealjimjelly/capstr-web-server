@@ -17,7 +17,7 @@
             <img src="icons/capstrlogo.jpg" alt="capstr logo" height="50vh" style="filter: none;">
         </div>
         <div class="d1">
-            <h2 id="h2">Welcome to The Clarice!</h2> <!-- Introduction message -->
+            <h2 id="h2">Welcome to <span id="venue">Capstr</span></h2> <!-- Introduction message -->
             <h1 id="h1">Please keep this page open on your phone during the show.</h1> <!-- Instructions for users -->
         </div>
     </div>
@@ -356,6 +356,7 @@ async function fetchShowSetup() {
         venue = data.venue;
         showname = data.showname;
         document.getElementById("venuename").innerText = venue;
+        document.title = showname;
 
         console.log('Venue:', venue);
         console.log('Show Name:', showname);
