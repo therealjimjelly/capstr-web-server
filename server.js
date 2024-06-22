@@ -12,6 +12,8 @@ const secretKey = process.env.SECRET_KEY;
 
 let receivedPacket = '';
 let clients = [];
+let venue = "capstr"
+let showname = "this show"
 
 app.use(express.json());
 app.use(cors());
@@ -49,8 +51,8 @@ app.post('/show-setup', authenticateJWT, (req, res) => {
         const parsedData = JSON.parse(receivedPacket);
         console.log('Parsed Data:', parsedData);
 
-        const venue = parsedData.venue;
-        const showname = parsedData.showname;
+        venue = parsedData.venue;
+        showname = parsedData.showname;
         
         console.log('Venue:', venue);
         console.log('Show Name:', showname);
@@ -60,6 +62,16 @@ app.post('/show-setup', authenticateJWT, (req, res) => {
         console.error('Error parsing JSON:', error);
         res.status(400).send('Invalid JSON format');
     }
+});
+
+app.get('/show-setup-client', (req, res) => {
+    // Example data - replace with your actual logic to get the show setup data
+    const showSetupData = {
+        venue: venue,
+        showname: showname
+    };
+
+    res.status(200).json(showSetupData);
 });
 
 app.get('/events', (req, res) => {

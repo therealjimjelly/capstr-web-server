@@ -58,7 +58,7 @@
     <div class="popup-content">
         <span class="close">&times;</span>
         <div>
-        <h3><font color="yellow">Welcome to Capstr!</font></h3> 
+        <h3><font color="yellow">Welcome to <span id="venuename">Capstr</span>!</font></h3> 
         <p><b>Please respect your fellow audience members by:</b></p>
         <p>✅ Putting your phone on silent and/or Do Not Disturb mode</p>
         <p>🚫 Refraining from checking texts/emails/social media or making calls</p>
@@ -133,6 +133,9 @@
 let timeoutHandle = null; // This will store the timeout handle so we can clear it if necessary
 let isConnected = false; // Initial state of the connection
 let langSelect = 1;
+
+let venue = "capstr";
+let showname = "this show";
 
 const manageConnection = async () => {
   isConnected = true; // Set isConnected to true immediately
@@ -231,6 +234,8 @@ const manageConnection = async () => {
 
             // Initialization function on page load
             window.onload = function () {
+                // Call the function on page load
+                fetchShowSetup();
                 checkOverrides();
                 cycleWelcomeTexts();
                 manageConnection();
@@ -331,6 +336,37 @@ document.getElementById('fontSizeSlider').oninput = function() {
     document.getElementById('fontSizeValue').innerText = fontScale + '%';
 };
 
+// Function to poll the web server and get the venue and show variables
+async function fetchShowSetup() {
+    try {
+        const response = await fetch('/show-setup', {
+            method: 'GET', // Assuming the server has a GET endpoint to fetch the show setup data
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Show Setup Data:', data);
+
+        venue = data.venue;
+        showname = data.showname;
+        document.getElementById("venuename").innerText = venue;
+
+        console.log('Venue:', venue);
+        console.log('Show Name:', showname);
+
+        // You can now use these variables to update your UI or perform other actions
+    } catch (error) {
+        console.error('Error fetching show setup data:', error);
+    }
+}
+
+
 
 function changeFont(fontName) {
     console.log("click");
@@ -354,7 +390,6 @@ function changeFont(fontName) {
         console.log(fontName)
     };
 }
-
 
 function changeLang(lang) {
     console.log("click");
