@@ -45,13 +45,21 @@ app.post('/receive-packet', authenticateJWT, (req, res) => {
 
 app.post('/show-setup', authenticateJWT, (req, res) => {
     receivedPacket = req.body.packet;
-    console.log('Packet received:', receivedPacket);
-    var data = JSON.parse(receivedPacket.data);
-    var venue = data.venue;
-    var show = data.showname;
-    console.log('Venue:', venue);
-    console.log('Show:', show);
-    res.status(200).send('Setup received');
+    try {
+        const parsedData = JSON.parse(receivedPacket);
+        console.log('Parsed Data:', parsedData);
+
+        const venue = parsedData.venue;
+        const showname = parsedData.showname;
+        
+        console.log('Venue:', venue);
+        console.log('Show Name:', showname);
+
+        res.status(200).send('Setup received');
+    } catch (error) {
+        console.error('Error parsing JSON:', error);
+        res.status(400).send('Invalid JSON format');
+    }
 });
 
 app.get('/events', (req, res) => {
