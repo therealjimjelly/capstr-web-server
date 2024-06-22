@@ -46,7 +46,7 @@ app.post('/receive-packet', authenticateJWT, (req, res) => {
 app.post('/show-setup', authenticateJWT, (req, res) => {
     receivedPacket = req.body.packet;
     console.log('Packet received:', receivedPacket);
-    var data = JSON.parse(receivedPacket);
+    var data = JSON.parse(receivedPacket.data);
     var venue = data.venue;
     var show = data.showname;
     console.log('Venue:', venue);
