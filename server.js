@@ -59,6 +59,14 @@ app.get('/events', (req, res) => {
     });
 });
 
+setInterval(() => {
+    app.locals.clients.forEach(client => {
+        if (!client.res.finished) {
+            client.res.write('data: {"keepAlive": true}\n\n');
+        }
+    });
+}, 15000); 
+
 app.listen(port, () => {
     const message = `Web server is running on port ${port}`;
     console.log(message);
