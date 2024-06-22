@@ -43,6 +43,13 @@ app.post('/receive-packet', authenticateJWT, (req, res) => {
     res.status(200).send('Packet received');
 });
 
+app.post('/show-setup', authenticateJWT, (req, res) => {
+    receivedPacket = req.body.packet;
+    console.log('Packet received:', receivedPacket);
+
+    res.status(200).send('Setup received');
+});
+
 app.get('/events', (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
