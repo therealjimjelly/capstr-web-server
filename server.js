@@ -59,13 +59,18 @@ app.get('/events', (req, res) => {
     });
 });
 
+// Send keep-alive messages to clients
 setInterval(() => {
-    app.locals.clients.forEach(client => {
-        if (!client.res.finished) {
-            client.res.write('data: {"keepAlive": true}\n\n');
-        }
-    });
-}, 15000); 
+    try {
+        clients.forEach(client => {
+            if (!client.res.finished) {
+                client.res.write('data: {"keepAlive": true}\n\n');
+            }
+        });
+    } catch (error) {
+        console.error('Error in setInterval:', error);
+    }
+}, 15000);
 
 app.listen(port, () => {
     const message = `Web server is running on port ${port}`;
