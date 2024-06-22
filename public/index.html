@@ -22,10 +22,6 @@
         </div>
     </div>
 
-    <!-- Placeholder for future settings -->
-    <div id="settings"></div>
-
-    <!-- Icons container for user interaction -->
     <div class="icon-container">
         <!-- Color theme switch icon -->
         <div class="icon" id="colorIcon">
@@ -84,8 +80,6 @@
     </div>
 </div>
 
-
-<!-- Font Size Selection Popup -->
 <div id="fontSizePopup" class="popup" style="display:none;">
     <div class="popup-content">
         <span class="close">&times;</span>
@@ -95,7 +89,6 @@
     </div>
 </div>
 
-<!-- Img Popup -->
 <div id="imgPopup" class="popup-img" style="display:none;">
     <div class="popup-img">
     </div>
@@ -118,16 +111,7 @@
             'The performance will begin shortly.',
             'Please remember to put your device on mute and do not disturb mode.',
             'You can adjust the appearance of the text with the buttons below.',
-            'LiveGuide is best viewed with your device in portait mode.',
-            ];
-
-               // Welcome Texts
-               const welcomeTextsLang2 = [
-            'Пожалуйста, оставьте эту страницу открытой на своём телефоне во время передачи.',
-            'Передача начнётся в ближайшее время.',
-            'Пожалуйста, помните поставить ваше устройство на бесшумный режим и не беспокойте.',
-            'Вы можете настроить внешний вид субтитров с помощью кнопок ниже.',
-            'Эти субтитры лучше всего просматривать с устройством в вертикальном режиме.',
+            'Capstr is best viewed with your device in portait mode.',
             ];
 
             // cycle through texts
@@ -241,7 +225,6 @@ const manageConnection = async () => {
     document.getElementById("defaultLang").addEventListener("click", function () {
         changeLang('default')
             });
-
     document.getElementById("Lang2").addEventListener("click", function () {
         changeLang('lang2')
             });
@@ -399,10 +382,6 @@ document.addEventListener('click', function(event) {
 });
 
         })();
-
-
-
-
 
     </script>
 </body>
