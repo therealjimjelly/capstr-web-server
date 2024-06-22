@@ -339,7 +339,7 @@ document.getElementById('fontSizeSlider').oninput = function() {
 // Function to poll the web server and get the venue and show variables
 async function fetchShowSetup() {
     try {
-        const response = await fetch('/show-setup', {
+        const response = await fetch('/show-setup-client', {
             method: 'GET', // Assuming the server has a GET endpoint to fetch the show setup data
             headers: {
                 'Content-Type': 'application/json'
