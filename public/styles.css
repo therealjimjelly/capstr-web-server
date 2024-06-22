@@ -1,0 +1,364 @@
+html,
+
+#root {
+    height: 100%;
+  }
+
+  @font-face {
+    font-family: openDyslexic;
+    src: url(OpenDyslexic-Regular.otf);
+  }
+
+  @font-face {
+    font-family: comicSans;
+    src: url(comic-sans.TTF);
+  }
+
+body,
+.container {
+    height: 100%;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: black;
+    text-align: center;
+    background-color: #000000;
+    /* Dark gray background */
+    color: #ffffff;
+    /* White text color */
+    height: 100vh;
+    touch-action: manipulation;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+#connectionIndicator {
+    position: fixed; /* Fixed positioning */
+    top: 0; /* Align to the top of the viewport */
+    right: 0; /* Align to the right of the viewport */
+    padding-top: 10px;
+    padding-right: 10px ;
+    z-index: 1000; /* Ensure it stays on top of other content */
+    text-align: right;
+}
+
+#logo {
+    position: fixed; /* Fixed positioning */
+    top: 0; /* Align to the top of the viewport */
+   left: 0; /* Align to the right of the viewport */
+    padding-top: 10px;
+    padding-left: 10px ;
+    z-index: 1000; /* Ensure it stays on top of other content */
+    text-align: right;
+}
+
+h1 {
+    color: white;
+    font-size: 3vh;
+}
+
+h2 {
+    color: yellow;
+    font-size: 3.5vh;
+    text-decoration: underline;
+    text-underline-offset: 0.5rem;
+}
+
+#defaultFont {
+    font-family: 'Open Sans', sans-serif;
+}
+
+#tnrFont {
+    font-family: 'Times New Roman', serif;
+}
+
+#csFont {
+    font-family: 'comicSans', sans-serif;
+}
+
+#odFont {
+    font-family: 'openDyslexic',sans-serif;
+}
+
+.lang-option {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.caption-container {
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.d1 {
+    width: 75%;
+    overflow-wrap: break-word;
+}
+
+/* Icon styles */
+.icon-container {
+    position: fixed;
+    padding-bottom: min(2vh, 5px);
+    padding-top: min(4vh, 10px);
+    bottom: 0;
+    display: flex;
+    height: clamp(50px, 10vh, 100px);
+    background-color:#333333c8;
+    width: 100%;
+    justify-content: center; 
+}
+
+.icon {
+
+    height: 90%; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+#helpIcon {
+    left: 20px;
+}
+
+#settingsIcon {
+    right: 20px;
+}
+
+.icon {
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+}
+
+
+
+/* Additional styles */
+#script-container {
+    height: 300px;
+    overflow: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #000000;
+    /* Black background */
+}
+
+.line-box {
+    cursor: pointer;
+    padding: 5px, 5px, 5px, 5px;
+    margin: 5px 0;
+    border: 1px solid #333;
+    /* Dark gray border */
+    border-radius: 5px;
+    background-color: #333;
+    /* Dark gray background */
+    color: #ffffff;
+    /* White text color */
+    position: relative;
+    /* Add this line to establish a positioning context */
+    padding-left: 20px;
+    /* Adjust the padding as needed to make space for the triangle */
+    padding-right: 20px;
+    /* Adjust the padding as needed to make space for the triangle */
+    text-align: left;
+}
+
+.line-box:hover {
+    background-color: #444;
+    /* Slightly lighter dark gray on hover */
+}
+
+.line-number {
+    display: inline-block;
+    width: 30px;
+    text-align: right;
+    margin-right: 5px;
+    color: #aaa;
+    user-select: none;
+}
+
+#control-box {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #333;
+    /* Dark gray background */
+}
+
+.control-line {
+    margin: 5px 0;
+    font-size: 12px;
+    color: #cccccc;
+    /* Light gray text color */
+    text-align: left;
+}
+
+.controlCurrentLine {
+    margin: 5px 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    /* White text color */
+    background-color: #001962;
+    /* Blue background */
+    text-align: left;
+}
+
+.playbackIcon {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 0 10px 16px;
+    /* Adjust the border-width for the desired size */
+    border-color: transparent transparent transparent #007bff;
+    /* Blue triangle color */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0px;
+    /* Adjust the positioning as needed */
+}
+
+
+.line-container {
+    display: flex;
+    align-items: center;
+}
+
+.line-index {
+    margin-right: 10px;
+    flex-shrink: 0;
+    /* prevent shrinking */
+    width: 30px;
+    /* set a fixed width, adjust as needed */
+    text-align: right;
+    /* align numbers to the right within their container */
+    display: inline-block;
+    /* ensure it respects width and alignment */
+    cursor: pointer;
+}
+
+.red-dot {
+    display: block;
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: red;
+    margin-right: 5px;
+}
+
+
+
+.popup {
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    
+}
+
+.popup-content {
+    background-color: #000000d2;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 3px solid yellow;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.popup-img {
+    position: fixed;
+    z-index: -1; /* Sit below */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.65); /* Black w/ opacity */
+
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat;
+    background-size: cover
+
+}
+
+.close {
+    color: #faf9f9;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: rgb(255, 255, 0);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.font-option {
+    cursor: pointer;
+    padding: 10px;
+    margin: 5px 0;
+}
+
+.lang-option {
+    cursor: pointer;
+    padding: 10px;
+    margin: 5px 0;
+}
+
+.font-option:hover {
+    background-color: #2b2b2bd2;
+}
+
+.lang-option:hover {
+    background-color: #2b2b2bd2;
+}
+
+#fontSizeSlider {
+    width: 100%;
+    margin: 15px 0;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 25px;
+    background: #707070;
+    outline: none;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 40px;
+    height: 40px;
+    background: #f2ff00;
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 40px;
+    height: 40px;
+    background: #f2ff00;
+    cursor: pointer;
+  }

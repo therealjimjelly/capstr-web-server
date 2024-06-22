@@ -3,35 +3,407 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Received Packet</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-        #packet {
-            font-size: 1.5em;
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS file -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>NOI LiveGuide</title> <!-- Page title -->
 </head>
+
 <body>
-    <h1>Received Packet</h1>
-    <div id="packet">No packet received</div>
+    <!-- Caption display container -->
+  
+    <div class="caption-container">
+        <div id ="connectionIndicator"></div>
+        <div id="logo">
+            <img src="capstrlogo.jpg" alt="capstr logo" height="50vh" style="filter: none;">
+        </div>
+        <div class="d1">
+            <h2 id="h2">Welcome to The Clarice!</h2> <!-- Introduction message -->
+            <h1 id="h1">Please keep this page open on your phone during the show.</h1> <!-- Instructions for users -->
+        </div>
+    </div>
 
+    <!-- Placeholder for future settings -->
+    <div id="settings"></div>
+
+    <!-- Icons container for user interaction -->
+    <div class="icon-container">
+        <!-- Color theme switch icon -->
+        <div class="icon" id="colorIcon" style="display:none;">
+            <img src="icons/color switch.svg" alt="Help Icon" width="100%" height="100%" style="filter: none;">
+        </div>
+        <!-- Font size decrease icon -->
+        <div class="icon" id="openFontSizePopup">
+            <img src="icons/text resize.svg" alt="Settings Icon" width="100%" height="100%" style="filter: none;">
+        </div>
+        <!-- Dyslexic friendly font icon-->
+        <div class="icon" id="typefaceIcon">
+            <img src="icons/typeface.svg" alt="Settings Icon" width="100%" height="100%" style="filter: none;">
+        </div>
+                <!-- Dyslexic friendly font icon-->
+                <div class="icon" id="langIcon" style="display:none;">
+                    <img src="icons/translate.svg" alt="Settings Icon" width="100%" height="100%" style="filter: none;">
+                </div>
+
+    </div>
+
+    <!-- Font Selection Popup -->
+<div id="fontPopup" class="popup" style="display:none;">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <h2> </h2>
+        <div class="font-option" id="defaultFont" >Default (Sans Serif)</div>
+        <div class="font-option" id="tnrFont">Times New Roman</div>
+        <div class="font-option" id="csFont">Comic Sans</div>
+        <div class="font-option" id="odFont">Open Dyslexic</div>
+    </div>
+</div>
+
+<div id="instructionPopup" class="popup" style="display:block;">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <div>
+        <h3><font color="yellow">Welcome to the Innovation Studio's NOI+ Festival Live Guide!</font></h3> 
+        <p><b>Please respect your fellow audience members by:</b></p>
+        <p>✅ Putting your phone on silent and/or Do Not Disturb mode</p>
+        <p>🚫 Refraining from checking texts/emails/social media or making calls</p>
+        <p>🚫 Not taking photos or videos</p>
+        <p>✅ Turning down your screen brightness</p>
+        <br>
+        <p>In the unlikely event you lose connection, a little ⚠️ icon will appear in the top right. Refresh the page to reconnect.</p>
+        <p>Let us know if this was useful to you! Give us feedback at the Innovation Corner after the show!</p>
+        </div>
+    </div>
+</div>
+
+<div id="langPopup" class="popup" style="display:none;">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <h2> </h2>
+        <div class="lang-option" id="defaultLang" >English</div>
+        <div class="lang-option" id="Lang2">Russian</div>
+    </div>
+</div>
+
+
+<!-- Font Size Selection Popup -->
+<div id="fontSizePopup" class="popup" style="display:none;">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <h2> </h2>
+        <input type="range" class="slider" id="fontSizeSlider" min="50" max="150" value="100"> <!-- Adjust min, max, value as needed -->
+        <h1 id="fontSizeValue">100%</h1>
+    </div>
+</div>
+
+<!-- Img Popup -->
+<div id="imgPopup" class="popup-img" style="display:none;">
+    <div class="popup-img">
+    </div>
+</div>
+
+
+    <!-- JavaScript for client interaction -->
     <script>
-        const eventSource = new EventSource('/events');
+        (function () {
+            "use strict";
 
-        eventSource.onmessage = function(event) {
-            document.getElementById('packet').innerText = event.data || 'No packet received';
-        };
+            // Initialization of variables
+            var disableColor = false; // Flag for disabling color
+            var fontScale = 100; // Base font scale percentage
+            var sizeAdapt = 1;
 
-        eventSource.onerror = function() {
-            console.error('EventSource failed.');
-        };
+            // Welcome Texts
+            const welcomeTexts = [
+            'Please keep this page open on your phone during the performance.',
+            'The performance will begin shortly.',
+            'Please remember to put your device on mute and do not disturb mode.',
+            'You can adjust the appearance of the text with the buttons below.',
+            'LiveGuide is best viewed with your device in portait mode.',
+            ];
+
+               // Welcome Texts
+               const welcomeTextsLang2 = [
+            'Пожалуйста, оставьте эту страницу открытой на своём телефоне во время передачи.',
+            'Передача начнётся в ближайшее время.',
+            'Пожалуйста, помните поставить ваше устройство на бесшумный режим и не беспокойте.',
+            'Вы можете настроить внешний вид субтитров с помощью кнопок ниже.',
+            'Эти субтитры лучше всего просматривать с устройством в вертикальном режиме.',
+            ];
+
+            // cycle through texts
+            let currentTextIndex = 0;
+            let cycleInterval;
+        
+            function cycleWelcomeTexts() {
+                cycleInterval = setInterval(() => {
+                    if (langSelect == 1) {
+                    document.getElementById("h1").innerText = welcomeTexts[currentTextIndex];}
+                    else {
+                    document.getElementById("h1").innerText = welcomeTextsLang2[currentTextIndex];}
+                    currentTextIndex = (currentTextIndex + 1) % welcomeTexts.length;
+                    }, 5000); // Change text every 3000 milliseconds (3 seconds)
+            }
+
+// connection indicator
+
+let timeoutHandle = null; // This will store the timeout handle so we can clear it if necessary
+let isConnected = false; // Initial state of the connection
+let langSelect = 1;
+
+const manageConnection = async () => {
+  isConnected = true; // Set isConnected to true immediately
+  document.getElementById('connectionIndicator').innerText = '';
+  // Clear existing timer if there is one
+  if (timeoutHandle !== null) {
+    clearTimeout(timeoutHandle);
+  }
+
+  // Wait for 15 seconds
+  await new Promise(resolve => {
+    timeoutHandle = setTimeout(() => {
+      isConnected = false; // After 15 seconds, set isConnected to false
+      document.getElementById('connectionIndicator').innerText = '⚠️';
+      resolve(); // Resolve the promise after the timeout
+    }, 17000); // 15000 milliseconds = 15 seconds
+  });
+};
+
+
+            // Function to retrieve a cookie's value
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                return parts.length === 2 ? parts.pop().split(';').shift() : undefined;
+            }
+
+            // Function to set a cookie
+            function setCookie(name, value, days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+            }
+
+            // Function to check and apply overrides from cookies
+            function checkOverrides() {
+                const cookieValue = getCookie("overrideColorCookie");
+                disableColor = cookieValue === "true";
+                document.getElementById("h2").style.color = disableColor ? 'white' : '';
+                document.body.style.filter = disableColor ? 'grayscale(100%)' : 'grayscale(0%)';
+                
+                const scaleCookieValue = getCookie("scaleCookie");
+
+                if (scaleCookieValue !== undefined) {
+        fontScale = parseInt(scaleCookieValue); // Make sure to convert it to an integer if it's stored as a string
+    } else {
+        fontScale = 100; // Default value if no cookie is found
+    }
+
+                setSize();
+
+            }
+
+            // Function to set size based on font scale
+            function setSize() {
+                var normScale = (fontScale / 100) * sizeAdapt;
+                console.log(sizeAdapt)
+                var newSize = 3.5 * normScale ; // Calculating new size for h1 element
+                var h2newSize = 4 * normScale; // Calculating new size for h2 element
+                document.getElementById("h1").style.fontSize = newSize + 'vh';
+                document.getElementById("h2").style.fontSize = h2newSize + 'vh';
+                document.getElementById("fontSizeValue").style.fontSize = newSize + 'vh';
+                setCookie("scaleCookie", fontScale, 365); // Update the scale cookie
+            }
+
+            // Event listener setup for color theme switch
+            document.getElementById("colorIcon").addEventListener("click", function () {
+                // Toggle and save color setting based on cookie
+                disableColor = !(getCookie("overrideColorCookie") === "true");
+                setCookie("overrideColorCookie", disableColor, 365);
+                checkOverrides();
+            });
+
+
+      // Event listener setup for color theme switch
+    document.getElementById("defaultFont").addEventListener("click", function () {
+        changeFont('')
+            });
+    document.getElementById("tnrFont").addEventListener("click", function () {
+        changeFont('Times New Roman')
+            });
+    document.getElementById("odFont").addEventListener("click", function () {
+        changeFont('OpenDyslexic')
+            });
+    document.getElementById("csFont").addEventListener("click", function () {
+        changeFont('comicSans')
+            });
+
+
+    document.getElementById("defaultLang").addEventListener("click", function () {
+        changeLang('default')
+            });
+
+    document.getElementById("Lang2").addEventListener("click", function () {
+        changeLang('lang2')
+            });
+
+            // Initialization function on page load
+            window.onload = function () {
+                checkOverrides();
+                cycleWelcomeTexts();
+                manageConnection();
+            
+            };
+
+            // Server-sent events for caption updates
+            var es = new EventSource('/events');
+            es.onmessage = function (event) {
+                
+                var data = JSON.parse(event.data);
+                if (!data.keepAlive) { // Ignore keep-alive messages
+                    manageConnection();
+                    caption(data); // Apply the caption styling based on data
+                } else { manageConnection();
+                    console.log("ping received");
+                }
+            };
+
+            // Error handling for server-sent events
+            es.addEventListener('error', function () {
+                console.error('Error with event source.');
+            });
+
+            // Function to apply text styling and captions from event data
+            function caption(text) {
+                console.log(text);
+                // Check if we're still cycling welcome texts; if so, stop
+                if (cycleInterval) {
+                    clearInterval(cycleInterval);
+                    cycleInterval = null; // Prevent future clearing if not necessary
+                }
+                var fontStyle = text.italics ? "italic" : "normal";
+                var fontWeight = text.bold ? "bold" : "normal";
+                var smallCaps = text.caps ? "small-caps" : "normal";
+                var underline = text.underline ? "underline" : "none";
+                var isImg = text.isImg
+                var imgURL = text.imgURL
+
+                document.getElementById('imgPopup').style.backgroundImage = `url('imgs/${imgURL}.jpg')`;
+
+                document.getElementById("h1").innerHTML = text.line;
+                document.getElementById("h2").innerHTML = text.character;
+                if (isImg == true) {
+                    document.getElementById('imgPopup').style.display = 'block';
+                } else if (isImg == false) {
+                    document.getElementById('imgPopup').style.display = 'none';
+                }
+
+                if (!disableColor) {
+                    document.getElementById("h2").style.color = text.color;
+                } else {
+                    document.getElementById("h2").style.color = 'white';
+                }
+                document.getElementById("h1").style.fontStyle = fontStyle;
+                document.getElementById("h1").style.fontWeight = fontWeight;
+                document.getElementById("h1").style.fontVariantCaps = smallCaps;
+                document.getElementById("h1").style.textDecoration = underline;
+            }
+
+            // Handling undefined captions as connection lost
+            if (document.getElementById("h1").innerHTML === "undefined" && document.getElementById("h2").innerHTML === "undefined") {
+                document.getElementById("h1").innerHTML = "Connection lost";
+                document.getElementById("h2").innerHTML = "Please refresh";
+            }
+
+
+            document.getElementById('typefaceIcon').onclick = function() {
+    document.getElementById('fontPopup').style.display = 'block';
+};
+
+document.getElementById('langIcon').onclick = function() {
+    document.getElementById('langPopup').style.display = 'block';
+};
+
+document.querySelectorAll('.close').forEach(closeButton => {
+    closeButton.onclick = function() {
+        this.parentElement.parentElement.style.display = 'none'; // Hide only the respective popup
+        console.log("click");
+    };
+}
+);
+
+document.getElementById('openFontSizePopup').onclick = function() {
+    if (fontScale === undefined) {
+  
+} else {document.getElementById('fontSizeValue').innerText = fontScale + '%';}
+    
+    document.getElementById('fontSizePopup').style.display = 'block';
+    document.getElementById('fontSizeSlider').value = fontScale;
+    
+};
+
+
+document.getElementById('fontSizeSlider').oninput = function() {
+    fontScale = this.value;
+    setSize();
+    document.getElementById('fontSizeValue').innerText = fontScale + '%';
+};
+
+
+function changeFont(fontName) {
+    console.log("click");
+    document.body.style.fontFamily = fontName;
+    document.getElementById('fontPopup').style.display = 'none'; // Close the popup after selection
+    if (fontName == 'OpenDyslexic') {
+        document.getElementById('h1').style.lineHeight = '120%';
+        sizeAdapt = 0.85;
+        setSize();
+        console.log(fontName)
+    }
+    else if (fontName == 'comicSans') {
+        document.getElementById('h1').style.lineHeight = '120%';
+        sizeAdapt = 0.9;
+        setSize();
+        console.log(fontName)
+    } else { 
+        document.getElementById('h1').style.lineHeight = '';
+        sizeAdapt = 1;
+        setSize();
+        console.log(fontName)
+    };
+}
+
+
+function changeLang(lang) {
+    console.log("click");
+    
+    if (lang == 'default') {
+        langSelect = 1;
+        console.log(lang)
+    } else { 
+        langSelect = 2;
+        console.log(lang)
+    };
+}
+
+document.addEventListener('click', function(event) {
+    // Check if the click happened outside of popup-content and is not from a popup-opener
+    if (!event.target.closest('.popup-content') && !event.target.closest('.icon')) {
+        // Close all popups
+        var popups = document.querySelectorAll('.popup');
+        for (var i = 0; i < popups.length; i++) {
+            if (popups[i].style.display == 'block') {
+                popups[i].style.display = 'none';
+            }
+        }
+    }
+});
+
+        })();
+
+
+
+
+
     </script>
 </body>
 </html>
