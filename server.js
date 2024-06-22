@@ -38,7 +38,7 @@ app.post('/receive-packet', authenticateJWT, (req, res) => {
     console.log('Packet received:', receivedPacket);
 
     // Send the update to all connected clients
-    clients.forEach(client => client.res.write(`data: ${receivedPacket}\n\n`));
+    clients.forEach(client => client.res.write(receivedPacket));
 
     res.status(200).send('Packet received');
 });
@@ -49,7 +49,7 @@ app.get('/events', (req, res) => {
     res.setHeader('Connection', 'keep-alive');
 
     // Send an initial message to confirm connection
-    res.write(`data: Connected\n\n`);
+    //res.write(`data: Connected\n\n`);
 
     const clientId = Date.now();
     clients.push({ id: clientId, res });
