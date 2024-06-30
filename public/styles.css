@@ -27,11 +27,61 @@ body {
     /* Dark gray background */
     color: #ffffff;
     /* White text color */
-    height: 100vh;
+    height: 90vh;
     touch-action: manipulation;
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
+}
+#startButton {
+    background-color: #42a14f; 
+    border-color: #1a3f1f;
+}
+
+#startButton:hover {
+    border-color: #b5fdbf;
+}
+
+#holdButton {
+    background-color: #a14242; 
+    border-color: #3f1a1a;
+}
+
+#holdButton:hover {
+    border-color: #fdb5b5;
+}
+
+#setupButton {
+    background-color: #a18b42; 
+    border-color: #614c1b;
+}
+
+#setupButton:hover {
+    border-color: #fdebb5;
+}
+
+
+
+.button {
+    background-color: #3d3d3d;
+    border: 5px solid #626262;
+    color: white;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 4px;
+    cursor: pointer;
+    border-radius: 8px;
+    text-shadow: 1px 1px 0px rgb(0, 0, 0);
+
+}
+
+.button:hover {
+    background-color: #525252;
+    border: 5px solid #ffffff;
+
 }
 
 #connectionIndicator {
@@ -94,6 +144,36 @@ h2 {
     
 }
 
+#searchInput {
+
+    flex-grow: 1;
+    background-color: #b5b5b5;
+    border: 5px solid #626262;
+    color: rgb(0, 0, 0);
+    padding: 5px 5px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 4px;
+    cursor: pointer;
+    border-radius: 8px;
+
+}
+
+#searchInput:hover {
+    border: 5px solid #ffffff;
+
+}
+
+::placeholder{
+    color: rgb(24, 24, 24);
+  }
+
+
+#search-box{
+    display: flex;
+  }
+
 .vertical-center {
     margin: 0;
     position: absolute;
@@ -107,25 +187,45 @@ h2 {
     overflow-wrap: break-word;
 }
 
-/* Icon styles */
+/* Ensure consistent icon size and padding */
+.icon img {
+
+    height: 100%;
+    border: 2px solid #525252;
+    border-radius: 10px;
+
+}
+
+/* Flexbox container for icons */
 .icon-container {
     position: fixed;
     padding-bottom: min(2vh, 5px);
     padding-top: min(4vh, 10px);
     bottom: 0;
+    left: 0;
     display: flex;
     height: clamp(50px, 10vh, 100px);
-    background-color:#333333c8;
+    background-color: #191919c8;
     width: 100%;
-    justify-content: center; 
+    justify-content: center;
+    align-items: center; /* Ensure icons are centered vertically */
+    transform: translateZ(0); /* Force hardware acceleration */
 }
 
+/* Icon styling */
 .icon {
-
-    height: 90%; 
-    display: flex; 
-    justify-content: center; 
+    height: 90%;
+    /* display: flex; */
+    justify-content: center;
     align-items: center;
+    margin: 0 10px; /* Add margin to separate icons */
+    aspect-ratio : 1 / 1;
+}
+
+/* Prevent CSS conflicts */
+.icon img {
+
+    max-height: 100%;
 }
 
 #helpIcon {
@@ -146,7 +246,7 @@ h2 {
 
 /* Additional styles */
 #script-container {
-    height: 300px;
+    height: 40vh;
     overflow: auto;
     border: 1px solid #ccc;
     padding: 10px;
@@ -156,12 +256,12 @@ h2 {
 
 .line-box {
     cursor: pointer;
-    padding: 5px, 5px, 5px, 5px;
-    margin: 5px 0;
+    padding: 7px;
+    margin: 2px 0;
     border: 1px solid #333;
     /* Dark gray border */
     border-radius: 5px;
-    background-color: #333;
+    background-color: #000000;
     /* Dark gray background */
     color: #ffffff;
     /* White text color */
@@ -212,10 +312,28 @@ h2 {
     /* White text color */
     background-color: #001962;
     /* Blue background */
+    border: 2px solid #2e4fb4;
     text-align: left;
+    border-radius: 10px;
+    padding: 5px;
 }
 
 .playbackIcon {
+    width: 10px;
+    height: 100%;
+    border-style: solid;
+    border-width: 0px;
+    background-color: #00b90c;
+    /* Adjust the border-width for the desired size */
+    border-color: #00b90c;
+    /* Blue triangle color */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0px;
+    /* Adjust the positioning as needed */
+}
+.nextplaybackIcon {
     width: 0;
     height: 0;
     border-style: solid;
@@ -275,9 +393,11 @@ h2 {
 
 .popup-content {
     background-color: #000000d2;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 12vh auto; /* 15% from the top and centered */
     padding: 20px;
+    padding-top: 45px;
     border: 3px solid yellow;
+    border-radius: 15px;
     width: 80%; /* Could be more or less, depending on screen size */
 }
 
@@ -300,8 +420,9 @@ h2 {
 .close {
     color: #faf9f9;
     float: right;
-    font-size: 28px;
+    font-size: 35px;
     font-weight: bold;
+    transform: translateY(-35px);
 }
 
 .close:hover,
@@ -315,12 +436,16 @@ h2 {
     cursor: pointer;
     padding: 10px;
     margin: 5px 0;
+    border-radius: 10px;
+background-color: rgba(27, 27, 27, 0.83);
 }
 
 .lang-option {
     cursor: pointer;
     padding: 10px;
     margin: 5px 0;
+    border-radius: 10px;
+background-color: rgba(27, 27, 27, 0.83);
 }
 
 .font-option:hover {
@@ -361,4 +486,46 @@ h2 {
     height: 40px;
     background: #f2ff00;
     cursor: pointer;
+  }
+
+  /* width */
+::-webkit-scrollbar {
+    width: 20px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 10px;
+    background: #444;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(255, 255, 255); 
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9e9e9e; 
+  }
+
+  input[type=text] {
+    background-color: #292929;
+    color: white;
+    border: 1px solid rgb(42, 42, 42);
+    border-bottom: 2px solid rgb(42, 42, 42);
+  }
+
+  input[type=text]:focus {
+    background-color: rgb(104, 104, 104);
+    border: 1px solid rgb(42, 42, 42);
+    border-bottom: 2px solid rgb(134, 134, 134);
+  }
+
+  .linetype-table, th, td {
+
+    border: 2px solid #989898;
+    border-collapse: collapse;
   }

@@ -44,23 +44,19 @@
     </div>
 
     <div class="icon-container">
-        <!-- Color theme switch icon -->
+        <!-- Other icons -->
         <div class="icon" id="colorIcon">
-            <img src="icons/color switch.svg" alt="Help Icon" width="100%" height="100%" style="filter: none;">
+            <img src="icons/color switch.svg" alt="Color Switch Icon" width="100%" height="100%" style="filter: none;">
         </div>
-        <!-- Font size decrease icon -->
         <div class="icon" id="openFontSizePopup">
-            <img src="icons/text resize.svg" alt="Settings Icon" width="100%" height="100%" style="filter: none;">
+            <img src="icons/text resize.svg" alt="Text Resize Icon" width="100%" height="100%" style="filter: none;">
         </div>
-        <!-- Dyslexic friendly font icon-->
         <div class="icon" id="typefaceIcon">
-            <img src="icons/typeface.svg" alt="Settings Icon" width="100%" height="100%" style="filter: none;">
+            <img src="icons/typeface.svg" alt="Typeface Icon" width="100%" height="100%" style="filter: none;">
         </div>
-                <!-- Dyslexic friendly font icon-->
-                <div class="icon" id="langIcon">
-                    <img src="icons/translate.svg" alt="Settings Icon" width="100%" height="100%" style="filter: none;">
-                </div>
-
+        <div class="icon" id="langIcon">
+            <img src="icons/translate.svg" alt="Translate Icon" width="100%" height="100%" style="filter: none;">
+        </div>
     </div>
 
     <!-- Font Selection Popup -->
@@ -125,6 +121,7 @@
             var fontScale = 100; // Base font scale percentage
             var sizeAdapt = 1;
 
+            /*
             // Welcome Texts
             const welcomeTexts = [
             'Please keep this page open on your phone during the performance.',
@@ -137,15 +134,18 @@
             // cycle through texts
             let currentTextIndex = 0;
             let cycleInterval;
+
+            */
         
             function cycleWelcomeTexts() {
-                cycleInterval = setInterval(() => {
-                    if (langSelect == 1) {
-                    document.getElementById("h1").innerText = welcomeTexts[currentTextIndex];}
-                    else {
-                    document.getElementById("h1").innerText = welcomeTextsLang2[currentTextIndex];}
-                    currentTextIndex = (currentTextIndex + 1) % welcomeTexts.length;
-                    }, 5000); // Change text every 3000 milliseconds (3 seconds)
+                document.getElementById("h2").innerText = `Welcome to ${venue}`;
+                document.getElementById("h1").innerText = `The performance of ${showname} will begin shortly.`;
+                if (!disableColor) {
+                    document.getElementById("h2").style.color = 'yellow';
+                } else {
+                    document.getElementById("h2").style.color = 'white';
+                }
+                
             }
 
 // connection indicator
@@ -266,6 +266,7 @@ fetchShowSetup();
             // Server-sent events for caption updates
             var es = new EventSource('/events');
             es.onmessage = function (event) {
+
                 
                 var data = JSON.parse(event.data);
                 if (!data.keepAlive) { // Ignore keep-alive messages
@@ -284,11 +285,13 @@ fetchShowSetup();
             // Function to apply text styling and captions from event data
             function caption(text) {
                 console.log(text);
-                // Check if we're still cycling welcome texts; if so, stop
-                if (cycleInterval) {
-                    clearInterval(cycleInterval);
-                    cycleInterval = null; // Prevent future clearing if not necessary
-                }
+
+                var holding = text.holding
+
+                if (holding) {
+                    cycleWelcomeTexts();
+                } else if (!holding) {
+
                 var fontStyle = text.italics ? "italic" : "normal";
                 var fontWeight = text.bold ? "bold" : "normal";
                 var smallCaps = text.caps ? "small-caps" : "normal";
@@ -298,8 +301,15 @@ fetchShowSetup();
 
                 document.getElementById('imgPopup').style.backgroundImage = `url('imgs/${imgURL}.jpg')`;
 
-                document.getElementById("h1").innerHTML = text.line;
-                document.getElementById("h2").innerHTML = text.character;
+                if (text.line !== "" && text.character !== "") {
+
+                    document.getElementById("h1").innerHTML = text.line;
+                    document.getElementById("h2").innerHTML = text.character;
+
+                } else {                 
+                    document.getElementById("h1").innerHTML = "...";
+                    document.getElementById("h2").innerHTML = text.character;
+                }
                 if (isImg == true) {
                     document.getElementById('imgPopup').style.display = 'block';
                 } else if (isImg == false) {
@@ -316,6 +326,8 @@ fetchShowSetup();
                 document.getElementById("h1").style.fontVariantCaps = smallCaps;
                 document.getElementById("h1").style.textDecoration = underline;
             }
+                }
+                
 
             // Handling undefined captions as connection lost
             if (document.getElementById("h1").innerHTML === "undefined" && document.getElementById("h2").innerHTML === "undefined") {
