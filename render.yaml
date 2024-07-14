@@ -1,24 +1,14 @@
-  
-  #################################################################
-# Example render.yaml                                           #
-# Do not use this file directly! Consult it for reference only. #
-#################################################################
-
-# List all services *except* PostgreSQL databases here
+# Exported from Render on 2024-07-14T04:06:42Z
 services:
-
-  - type: web
-    runtime: node
-    name: capstr-web
-    repo: https://github.com/render-examples/sinatra # Default: Repo containing render.yaml
-    numInstances: 1   # Manual scaling configuration. Default: 1 for new services
-    region: oregon # Default: oregon
-    plan: free    # Default: starter
-    branch: main      # Default: master
-    buildCommand: npm install
-    startCommand: npm start
-    autoDeploy: false # Disable automatic deploys
-    maxShutdownDelaySeconds: 120 # Increase graceful shutdown period. Default: 30, Max: 300
-    envVars: # Environment variables
-        - key: SECRET_KEY
-          sync: false
+- type: web
+  name: CAPSTR_UMD
+  runtime: node
+  repo: https://github.com/therealjimjelly/capstr-web-server
+  plan: free
+  envVars:
+  - key: SECRET_KEY
+    sync: false
+  region: virginia
+  buildCommand: npm install
+  startCommand: node server.js
+version: "1"
