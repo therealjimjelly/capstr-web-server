@@ -1,7 +1,7 @@
 # Exported from Render on 2024-07-14T04:06:42Z
 services:
 - type: web
-  name: CAPSTR_UMD
+  name: capstr-web
   runtime: node
   repo: https://github.com/therealjimjelly/capstr-web-server
   plan: free

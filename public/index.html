@@ -37,16 +37,23 @@
         <div id="logo">
             <img src="icons/capstrlogo.jpg" alt="capstr logo" height="50vh" style="filter: none;">
         </div>
-        <div class="d1">
+        <div class="d1" id="capdiv">
             <h2 id="h2">Welcome to <span id="venuewelcomecycle">Capstr</span></h2> <!-- Introduction message -->
             <h1 id="h1">Please keep this page open on your phone during the show.</h1> <!-- Instructions for users -->
+            <div id="ghostdiv" style="display: none; width: 100%">
+                <h3 id="ghost"></h3>
+                <h3 id="ghost2"></h3>
         </div>
-    </div>
+        </div>
+
 
     <div class="icon-container">
         <!-- Other icons -->
         <div class="icon" id="colorIcon">
             <img src="icons/color switch.svg" alt="Color Switch Icon" width="100%" height="100%" style="filter: none;">
+        </div>
+        <div class="icon" id="ghostIcon">
+            <img src="icons/ghosting.svg" alt="Ghosting Icon" width="100%" height="100%" style="filter: none;">
         </div>
         <div class="icon" id="openFontSizePopup">
             <img src="icons/text resize.svg" alt="Text Resize Icon" width="100%" height="100%" style="filter: none;">
@@ -118,6 +125,7 @@
 
             // Initialization of variables
             var disableColor = false; // Flag for disabling color
+            var enableGhost = false; // Flag for disabling color
             var fontScale = 100; // Base font scale percentage
             var sizeAdapt = 1;
 
@@ -156,6 +164,12 @@ let langSelect = 1;
 
 let venue = "capstr";
 let showname = "this show";
+let currentCaption = "";
+let prevCaption = "";
+let prevprevCaption = "";
+let currentColor = "white";
+let prevColor = "white";
+let prevprevColor = "white";
 
 const manageConnection = async () => {
   isConnected = true; // Set isConnected to true immediately
@@ -193,10 +207,14 @@ fetchShowSetup();
 
             // Function to check and apply overrides from cookies
             function checkOverrides() {
-                const cookieValue = getCookie("overrideColorCookie");
-                disableColor = cookieValue === "true";
-                document.getElementById("h2").style.color = disableColor ? 'white' : '';
+                // const cookieValue = getCookie("overrideColorCookie");
+                // disableColor = cookieValue === "true";
+                
+                document.getElementById("ghostdiv").style.display = enableGhost ? 'block' : 'none';
+                
                 document.body.style.filter = disableColor ? 'grayscale(100%)' : 'grayscale(0%)';
+                document.getElementById("capdiv").style.filter = disableColor  ? 'grayscale(100%)' : 'grayscale(0%)';
+                document.getElementById("capdiv").style.filter = disableColor ? 'brightness(1000)' : 'brightness(1)';
                 
                 const scaleCookieValue = getCookie("scaleCookie");
 
@@ -230,6 +248,14 @@ fetchShowSetup();
                 checkOverrides();
             });
 
+            // Event listener setup for color theme switch
+            document.getElementById("ghostIcon").addEventListener("click", function () {
+                // Toggle and save color setting based on cookie
+                enableGhost = !(getCookie("ghostCookie") === "true");
+                setCookie("ghostCookie", enableGhost, 365);
+                checkOverrides();
+            });
+
 
       // Event listener setup for color theme switch
     document.getElementById("defaultFont").addEventListener("click", function () {
@@ -252,6 +278,7 @@ fetchShowSetup();
     document.getElementById("Lang2").addEventListener("click", function () {
         changeLang('lang2')
             });
+
 
             // Initialization function on page load
             window.onload = function () {
@@ -291,7 +318,10 @@ fetchShowSetup();
                 if (holding) {
                     cycleWelcomeTexts();
                 } else if (!holding) {
-
+                prevprevCaption = prevCaption;
+                prevprevColor = colorShade(prevColor, 20);
+                prevCaption = currentCaption;
+                prevColor = colorShade(currentColor, 90);
                 var fontStyle = text.italics ? "italic" : "normal";
                 var fontWeight = text.bold ? "bold" : "normal";
                 var smallCaps = text.caps ? "small-caps" : "normal";
@@ -304,11 +334,13 @@ fetchShowSetup();
                 if (text.line !== "" && text.character !== "") {
 
                     document.getElementById("h1").innerHTML = text.line;
+                    currentCaption = text.character + ": "+ text.line;
                     document.getElementById("h2").innerHTML = text.character;
 
                 } else {                 
                     document.getElementById("h1").innerHTML = "...";
                     document.getElementById("h2").innerHTML = text.character;
+                    currentCaption = "...";
                 }
                 if (isImg == true) {
                     document.getElementById('imgPopup').style.display = 'block';
@@ -318,13 +350,23 @@ fetchShowSetup();
 
                 if (!disableColor) {
                     document.getElementById("h2").style.color = text.color;
+                    document.getElementById("h1").style.color = text.color;
+                    console.log(text.color);
+                    document.getElementById("ghost").style.color = prevColor;
+                    document.getElementById("ghost2").style.color = prevprevColor;
+                    currentColor = text.color;
                 } else {
                     document.getElementById("h2").style.color = 'white';
+                    document.getElementById("h1").style.color = 'white';
+                    currentColor = 'white';
                 }
                 document.getElementById("h1").style.fontStyle = fontStyle;
                 document.getElementById("h1").style.fontWeight = fontWeight;
                 document.getElementById("h1").style.fontVariantCaps = smallCaps;
                 document.getElementById("h1").style.textDecoration = underline;
+
+                document.getElementById("ghost").innerText = prevCaption;
+                document.getElementById("ghost2").innerText = prevprevCaption;
             }
                 }
                 
@@ -368,6 +410,25 @@ document.getElementById('fontSizeSlider').oninput = function() {
     setSize();
     document.getElementById('fontSizeValue').innerText = fontScale + '%';
 };
+
+const colorShade = (col, amt) => {
+  col = col.replace(/^#/, '')
+  if (col.length === 3) col = col[0] + col[0] + col[1] + col[1] + col[2] + col[2]
+
+  let [r, g, b] = col.match(/.{2}/g);
+  ([r, g, b] = [parseInt(r, 16) + amt, parseInt(g, 16) + amt, parseInt(b, 16) + amt])
+
+  r = Math.max(Math.min(255, r), 0).toString(16)
+  g = Math.max(Math.min(255, g), 0).toString(16)
+  b = Math.max(Math.min(255, b), 0).toString(16)
+
+  const rr = (r.length < 2 ? '0' : '') + r
+  const gg = (g.length < 2 ? '0' : '') + g
+  const bb = (b.length < 2 ? '0' : '') + b
+
+  return `#${rr}${gg}${bb}`
+}
+
 
 // Function to poll the web server and get the venue and show variables
 async function fetchShowSetup() {
