@@ -109,6 +109,23 @@ h1 {
     font-size: 3vh;
 }
 
+h3 {
+    color: rgb(96, 96, 96);
+    font-size: 2.4vh;
+}
+
+#ghost2 {
+    color: #3c3c3c;
+    font-size: 2vh;
+    opacity: 75%;
+    filter: blur(1px);
+}
+
+#ghostdiv{
+    filter: contrast(1);
+    opacity: 50%;
+}
+
 h2 {
     color: yellow;
     font-size: 3.5vh;
@@ -252,6 +269,11 @@ h2 {
     padding: 10px;
     background-color: #000000;
     /* Black background */
+}
+
+/* Additional styles */
+#setupbuttons {
+    padding-top: 5%;
 }
 
 .line-box {
