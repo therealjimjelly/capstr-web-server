@@ -1,0 +1,7 @@
+{
+    "name": "Capstr Web Server",
+    "description": "Receiver app for Capstr",
+    "repository": "https://github.com/therealjimjelly/capstr-web-server",
+    "logo": "https://node-js-sample-1234567890ab.herokuapp.com/node.png",
+    "keywords": ["node", "express", "static"]
+  }

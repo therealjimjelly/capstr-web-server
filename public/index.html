@@ -326,15 +326,22 @@ fetchShowSetup();
                 var fontWeight = text.bold ? "bold" : "normal";
                 var smallCaps = text.caps ? "small-caps" : "normal";
                 var underline = text.underline ? "underline" : "none";
+                var brLeft = text.brackets ? "[" : "none";
+                var brRight = text.brackets ? "]" : "none";
+                var noteChar = text.notes ? "🎵" : "none";
                 var isImg = text.isImg
                 var imgURL = text.imgURL
+
+                console.log("brackets =" + brLeft)
+                console.log("notes = " + noteChar)
 
                 document.getElementById('imgPopup').style.backgroundImage = `url('imgs/${imgURL}.jpg')`;
 
                 if (text.line !== "" && text.character !== "") {
 
-                    document.getElementById("h1").innerHTML = text.line;
-                    currentCaption = text.character + ": "+ text.line;
+                    let appendedLine = brLeft + noteChar + text.line + noteChar + brRight;
+                    document.getElementById("h1").innerHTML =  appendedLine;
+                    currentCaption = text.character + ": "+ appendedLine;
                     document.getElementById("h2").innerHTML = text.character;
 
                 } else {                 
