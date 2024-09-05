@@ -38,12 +38,15 @@
             <img src="icons/capstrlogo.jpg" alt="capstr logo" height="50vh" style="filter: none;">
         </div>
         <div class="d1" id="capdiv">
+            <div id="ghostdiv" style="display: none; width: 100%">
+                <h3 id="ghost2"></h3>
+                <h3 id="ghost"></h3>  
+        </div>
+        <div>
             <h2 id="h2">Welcome to <span id="venuewelcomecycle">Capstr</span></h2> <!-- Introduction message -->
             <h1 id="h1">Please keep this page open on your phone during the show.</h1> <!-- Instructions for users -->
-            <div id="ghostdiv" style="display: none; width: 100%">
-                <h3 id="ghost"></h3>
-                <h3 id="ghost2"></h3>
         </div>
+
         </div>
 
 
@@ -53,7 +56,7 @@
             <img src="icons/color switch.svg" alt="Color Switch Icon" width="100%" height="100%" style="filter: none;">
         </div>
         <div class="icon" id="ghostIcon">
-            <img src="icons/ghosting.svg" alt="Ghosting Icon" width="100%" height="100%" style="filter: none;">
+            <img id = "ghostimg" src="icons/ghosting.svg" alt="Ghosting Icon" width="100%" height="100%" style="filter: none;">
         </div>
         <div class="icon" id="openFontSizePopup">
             <img src="icons/text resize.svg" alt="Text Resize Icon" width="100%" height="100%" style="filter: none;">
@@ -170,6 +173,8 @@ let prevprevCaption = "";
 let currentColor = "white";
 let prevColor = "white";
 let prevprevColor = "white";
+let currentData = "";
+let currentFont = "";
 
 const manageConnection = async () => {
   isConnected = true; // Set isConnected to true immediately
@@ -211,6 +216,8 @@ fetchShowSetup();
                 // disableColor = cookieValue === "true";
                 
                 document.getElementById("ghostdiv").style.display = enableGhost ? 'block' : 'none';
+                document.getElementById("ghostimg").src = enableGhost ? "icons/ghosting.svg" :  "icons/ghosting off.svg";
+                
                 
                 document.body.style.filter = disableColor ? 'grayscale(100%)' : 'grayscale(0%)';
                 document.getElementById("capdiv").style.filter = disableColor  ? 'grayscale(100%)' : 'grayscale(0%)';
@@ -219,10 +226,10 @@ fetchShowSetup();
                 const scaleCookieValue = getCookie("scaleCookie");
 
                 if (scaleCookieValue !== undefined) {
-        fontScale = parseInt(scaleCookieValue); // Make sure to convert it to an integer if it's stored as a string
-    } else {
-        fontScale = 100; // Default value if no cookie is found
-    }
+                    fontScale = parseInt(scaleCookieValue); // Make sure to convert it to an integer if it's stored as a string
+                } else {
+                    fontScale = 100; // Default value if no cookie is found
+                }
 
                 setSize();
 
@@ -274,9 +281,11 @@ fetchShowSetup();
 
     document.getElementById("defaultLang").addEventListener("click", function () {
         changeLang('default')
+        caption(currentData);
             });
     document.getElementById("Lang2").addEventListener("click", function () {
         changeLang('lang2')
+        caption(currentData);
             });
 
 
@@ -287,6 +296,7 @@ fetchShowSetup();
                 checkOverrides();
                 cycleWelcomeTexts();
                 manageConnection();
+                fetchShowSetup();
             
             };
 
@@ -299,6 +309,7 @@ fetchShowSetup();
                 if (!data.keepAlive) { // Ignore keep-alive messages
                     manageConnection();
                     caption(data); // Apply the caption styling based on data
+                    currentData = data;
                 } else { manageConnection();
                     console.log("ping received");
                 }
@@ -317,31 +328,40 @@ fetchShowSetup();
 
                 if (holding) {
                     cycleWelcomeTexts();
+                    fetchShowSetup();
                 } else if (!holding) {
+                    fetchShowSetup();
                 prevprevCaption = prevCaption;
-                prevprevColor = colorShade(prevColor, 20);
+                prevprevColor = prevColor;
                 prevCaption = currentCaption;
-                prevColor = colorShade(currentColor, 90);
+                prevColor = currentColor;
                 var fontStyle = text.italics ? "italic" : "normal";
                 var fontWeight = text.bold ? "bold" : "normal";
                 var smallCaps = text.caps ? "small-caps" : "normal";
                 var underline = text.underline ? "underline" : "none";
-                var brLeft = text.brackets ? "[" : "none";
-                var brRight = text.brackets ? "]" : "none";
-                var noteChar = text.notes ? "🎵" : "none";
+                var brLeft = text.brackets ? "[" : "";
+                var brRight = text.brackets ? "]" : "";
+                var noteChar = text.notes ? "🎵" : "";
                 var isImg = text.isImg
                 var imgURL = text.imgURL
-
-                console.log("brackets =" + brLeft)
-                console.log("notes = " + noteChar)
+                var currentLangCaption = text.line;
 
                 document.getElementById('imgPopup').style.backgroundImage = `url('imgs/${imgURL}.jpg')`;
 
                 if (text.line !== "" && text.character !== "") {
+                    if (langSelect == 1) {
+                    // currentLangCaption = text.line;
+                    //currentCaption = text.character + ": "+ text.line;
+                    } else if (langSelect == 2) {
+                        currentLangCaption = text.lang2;
+                        //currentCaption = text.character + ": "+ currentLangCaption;
+                    }
+                    
+                    let appendedLine = brLeft + noteChar + currentLangCaption + noteChar + brRight;
+                    currentCaption = text.character + ": "+ currentLangCaption;
 
-                    let appendedLine = brLeft + noteChar + text.line + noteChar + brRight;
-                    document.getElementById("h1").innerHTML =  appendedLine;
-                    currentCaption = text.character + ": "+ appendedLine;
+                    document.getElementById("h1").innerHTML = appendedLine;
+
                     document.getElementById("h2").innerHTML = text.character;
 
                 } else {                 
@@ -386,10 +406,12 @@ fetchShowSetup();
 
 
             document.getElementById('typefaceIcon').onclick = function() {
-    document.getElementById('fontPopup').style.display = 'block';
-};
+                document.getElementById('fontPopup').style.display = 'block';
+                updatefontlist();
+            };
 
 document.getElementById('langIcon').onclick = function() {
+    updatelanglist()
     document.getElementById('langPopup').style.display = 'block';
 };
 
@@ -436,6 +458,39 @@ const colorShade = (col, amt) => {
   return `#${rr}${gg}${bb}`
 }
 
+function updatelanglist(){
+    if (langSelect == 1) {
+                    document.getElementById("defaultLang").style.color = 'yellow';
+                    document.getElementById("Lang2").style.color = 'white';
+                } else if (langSelect == 2) {
+                    document.getElementById("defaultLang").style.color = 'white';
+                    document.getElementById("Lang2").style.color = 'yellow';
+                }
+}
+
+function updatefontlist(){
+    if (currentFont == '') {
+                    document.getElementById("defaultFont").style.color = 'yellow';
+                    document.getElementById("tnrFont").style.color = 'white';
+                    document.getElementById("csFont").style.color = 'white';
+                    document.getElementById("odFont").style.color = 'white';
+                } else if (currentFont == 'Times New Roman') {
+                    document.getElementById("defaultFont").style.color = 'white';
+                    document.getElementById("tnrFont").style.color = 'yellow';
+                    document.getElementById("csFont").style.color = 'white';
+                    document.getElementById("odFont").style.color = 'white';
+                } else if (currentFont == 'comicSans') {
+                    document.getElementById("defaultFont").style.color = 'white';
+                    document.getElementById("tnrFont").style.color = 'white';
+                    document.getElementById("csFont").style.color = 'yellow';
+                    document.getElementById("odFont").style.color = 'white';
+                } else if (currentFont == 'OpenDyslexic') {
+                    document.getElementById("defaultFont").style.color = 'white';
+                    document.getElementById("tnrFont").style.color = 'white';
+                    document.getElementById("csFont").style.color = 'white';
+                    document.getElementById("odFont").style.color = 'yellow';
+                }
+}
 
 // Function to poll the web server and get the venue and show variables
 async function fetchShowSetup() {
@@ -456,12 +511,26 @@ async function fetchShowSetup() {
 
         venue = data.venue;
         showname = data.showname;
+        let lang2 = data.lang2;
+        let primarylang = data.primarylang;
+        let numLangs = data.numLangs;
         document.getElementById("venuename").innerText = venue;
-        document.getElementById("venuewelcomecycle").innerText = venue;
+        // document.getElementById("venuewelcomecycle").innerText = venue;
         document.title = showname;
+
+        if (numLangs >= 2) {
+            document.getElementById("langIcon").style.display = 'block';
+            console.log('langIcon');
+        } else {
+            document.getElementById("langIcon").style.display = 'none';
+            console.log('no langIcon');
+        }
 
         console.log('Venue:', venue);
         console.log('Show Name:', showname);
+        console.log('Lang2:', lang2);
+        document.getElementById("Lang2").innerHTML = lang2;
+        document.getElementById("defaultLang").innerHTML = primarylang;
 
         // You can now use these variables to update your UI or perform other actions
     } catch (error) {
@@ -472,6 +541,7 @@ async function fetchShowSetup() {
 
 
 function changeFont(fontName) {
+    currentFont = fontName;
     console.log("click");
     document.body.style.fontFamily = fontName;
     document.getElementById('fontPopup').style.display = 'none'; // Close the popup after selection
@@ -492,6 +562,7 @@ function changeFont(fontName) {
         setSize();
         console.log(fontName)
     };
+    updatefontlist();
 }
 
 function changeLang(lang) {
@@ -504,6 +575,7 @@ function changeLang(lang) {
         langSelect = 2;
         console.log(lang)
     };
+    updatelanglist()
 }
 
 document.addEventListener('click', function(event) {
