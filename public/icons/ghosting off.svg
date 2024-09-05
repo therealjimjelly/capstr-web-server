@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g>
+        <path d="M512,128L512,384C512,454.645 454.645,512 384,512L128,512C57.355,512 0,454.645 0,384L0,128C0,57.355 57.355,0 128,0L384,0C454.645,0 512,57.355 512,128Z"/>
+        <path d="M512,128L512,384C512,454.645 454.645,512 384,512L128,512C57.355,512 -0,454.645 -0,384L-0,128C-0,57.355 57.355,-0 128,-0L384,-0C454.645,-0 512,57.355 512,128ZM503,128C503,62.322 449.678,9 384,9L128,9C62.322,9 9,62.322 9,128L9,384C9,449.678 62.322,503 128,503L384,503C449.678,503 503,449.678 503,384L503,128Z"/>
+        <g transform="matrix(1.30143,0,0,1.30143,1.16919,-224.516)">
+            <g transform="matrix(67.6815,0,0,67.6815,347.853,468.896)">
+            </g>
+            <text x="50.325px" y="468.896px" style="font-family:'ArialRoundedMTBold', 'Arial Rounded MT Bold', sans-serif;font-size:67.682px;fill:white;">Ghosting</text>
+        </g>
+        <g transform="matrix(1.30143,0,0,1.30143,120.871,-131.84)">
+            <g transform="matrix(67.6815,0,0,67.6815,151.517,468.896)">
+            </g>
+            <text x="50.325px" y="468.896px" style="font-family:'ArialRoundedMTBold', 'Arial Rounded MT Bold', sans-serif;font-size:67.682px;fill:white;">Of<tspan x="128.978px " y="468.896px ">f</tspan></text>
+        </g>
+        <g transform="matrix(0.589115,0,0,0.302257,112.829,30.0112)">
+            <rect x="73.532" y="200.454" width="352.724" height="80.724" style="stroke:white;stroke-width:10.68px;"/>
+        </g>
+        <g transform="matrix(0.782654,0,0,0.397747,60.623,47.3776)">
+            <rect x="73.532" y="200.454" width="352.724" height="80.724" style="stroke:white;stroke-width:8.05px;"/>
+        </g>
+        <g transform="matrix(1.01315,0,0,0.413413,6.66599,89.3047)">
+            <rect x="73.532" y="200.454" width="352.724" height="80.724" style="stroke:white;stroke-width:6.46px;"/>
+        </g>
+        <g transform="matrix(1.07923,0,0,1.17756,-8.97128,-71.1788)">
+            <rect x="52.288" y="245.213" width="396.523" height="63.91" style="fill:white;stroke:white;stroke-width:0.89px;"/>
+        </g>
+    </g>
+</svg>
