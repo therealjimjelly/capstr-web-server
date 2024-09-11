@@ -74,6 +74,9 @@ app.post('/show-setup', authenticateJWT, (req, res) => {
 
         venue = parsedData.venue;
         showname = parsedData.showname;
+        primarylang = parsedData.primarylang;
+        lang2 = parsedData.lang2;
+        numLangs = parsedData.numLangs;
         
         console.log('Venue:', venue);
         console.log('Show Name:', showname);
@@ -89,7 +92,10 @@ app.get('/show-setup-client', (req, res) => {
     // Example data - replace with your actual logic to get the show setup data
     const showSetupData = {
         venue: venue,
-        showname: showname
+        showname: showname,
+        primarylang: primarylang,
+        lang2: lang2,
+        numLangs: numLangs
     };
 
     res.status(200).json(showSetupData);
