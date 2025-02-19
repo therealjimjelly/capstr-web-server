@@ -102,6 +102,7 @@ body {
     padding-left: 10px ;
     z-index: 1000; /* Ensure it stays on top of other content */
     text-align: right;
+    opacity: 50%;
 }
 
 h1 {
