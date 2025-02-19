@@ -240,7 +240,7 @@ fetchShowSetup();
                 var normScale = (fontScale / 100) * sizeAdapt;
                 console.log(sizeAdapt)
                 var newSize = 3.5 * normScale ; // Calculating new size for h1 element
-                var h2newSize = 4 * normScale; // Calculating new size for h2 element
+                var h2newSize = 3 * normScale; // Calculating new size for h2 element
                 document.getElementById("h1").style.fontSize = newSize + 'vh';
                 document.getElementById("h2").style.fontSize = h2newSize + 'vh';
                 document.getElementById("fontSizeValue").style.fontSize = newSize + 'vh';
@@ -358,7 +358,8 @@ fetchShowSetup();
                     }
                     
                     let appendedLine = brLeft + noteChar + currentLangCaption + noteChar + brRight;
-                    currentCaption = text.character + ": "+ currentLangCaption;
+                    currentCaption = currentLangCaption;
+                    //currentCaption = text.character + ": "+ currentLangCaption;
 
                     document.getElementById("h1").innerHTML = appendedLine;
 
