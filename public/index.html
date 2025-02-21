@@ -579,6 +579,12 @@ function changeLang(lang) {
     updatelanglist()
 }
 
+document.getElementById('connectionIndicator').onclick = function() {
+
+if (isConnected == false) {
+window.location.reload();;}
+};
+
 document.addEventListener('click', function(event) {
     // Check if the click happened outside of popup-content and is not from a popup-opener
     if (!event.target.closest('.popup-content') && !event.target.closest('.icon')) {
