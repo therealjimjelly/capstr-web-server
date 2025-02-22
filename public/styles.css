@@ -217,7 +217,7 @@ h2 {
 /* Flexbox container for icons */
 .icon-container {
     position: fixed;
-    padding-bottom: min(2vh, 5px);
+    padding-bottom: min(5vh, 10px);
     padding-top: min(4vh, 10px);
     bottom: 0;
     left: 0;
