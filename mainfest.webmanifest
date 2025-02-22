@@ -1,0 +1,16 @@
+{
+    "name": "Capstr UMD",
+    "short_name": "CapstrUMD",
+    "start_url": "/public/index.html",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#ffffff",
+    "description": "Captioning for shows at UMD",
+    "icons": [
+        {
+            "src": "/public/icons/capstricon.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        }
+    ]
+}
