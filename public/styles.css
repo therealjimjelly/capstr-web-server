@@ -219,7 +219,7 @@ h2 {
     position: fixed;
     padding-bottom: min(5vh, 10px);
     padding-top: min(4vh, 10px);
-    bottom: 0;
+    bottom: 15px;
     left: 0;
     display: flex;
     background-color: #191919c8;
